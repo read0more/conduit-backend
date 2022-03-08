@@ -41,11 +41,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected $appends = ['token'];
 
-    protected function token(): Attribute
+    protected function getTokenAttribute()
     {
-        return new Attribute(function() {
-            // todo: 토큰 넣게 해야함
-            return null;
-        });
+        return $this->attributes['token'];
+    }
+
+    protected function setTokenAttribute($token)
+    {
+        $this->attributes['token'] = $token;
     }
 }
