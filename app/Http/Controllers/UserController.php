@@ -50,4 +50,22 @@ class UserController extends Controller
     {
         return response()->json(['user' => $request->user()]);
     }
+
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'user' => 'required|array|min:1',
+            'user.username' => 'unique:users,username',
+            'user.email' => 'email|unique:users,email',
+        ]);
+
+        $userFileds = $request->all()['user'];
+        if ($userFileds['password'] ?? false) {
+            $userFileds['password'] = Hash::make($userFileds['password']);
+        }
+
+        $user = User::find($request->user()['id']);
+        $user->update($userFileds);
+        return response()->json(['user' => $user], 201);
+    }
 }
