@@ -23,13 +23,7 @@ $router->group(['prefix' => 'users'], function () use ($router) {
     $router->post('/login', 'UserController@login');
 });
 
-$router->get('/user', [
-    'middleware' => 'auth',
-    'uses' => 'UserController@me'
-]);
-
-
-$router->put('user', [
-    'middleware' => 'auth',
-    'uses' => 'UserController@update'
-]);
+$router->group(['prefix' => 'user', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/', 'UserController@me');
+    $router->put('/', 'UserController@update');
+});
