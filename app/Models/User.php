@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,13 +14,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, HasFactory;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'username', 'email', 'password', 'bio', 'image'
     ];
 
     /**
@@ -30,4 +33,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    protected $attributes = [
+        'bio' => null,
+        'image' => null,
+    ];
+
+    protected $appends = ['token'];
+
+    protected function token(): Attribute
+    {
+        return new Attribute(function() {
+            // todo: 토큰 넣게 해야함
+            return null;
+        });
+    }
 }
