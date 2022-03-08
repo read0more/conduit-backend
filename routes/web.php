@@ -22,3 +22,9 @@ $router->group(['prefix' => 'users'], function () use ($router) {
     $router->post('/', 'UserController@register');
     $router->post('/login', 'UserController@login');
 });
+
+$router->get('user', [
+    'middleware' => 'auth',
+    'uses' => 'UserController@me'
+]);
+

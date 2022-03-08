@@ -45,4 +45,9 @@ class UserController extends Controller
         $user->token = Auth::attempt(['email' => $userFileds['email'], 'password' => $userFileds['password']]);
         return response()->json(['user' => $user]);
     }
+
+    public function me(Request $request)
+    {
+        return response()->json(['user' => $request->user()]);
+    }
 }

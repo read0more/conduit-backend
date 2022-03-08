@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -43,7 +44,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected function getTokenAttribute()
     {
-        return $this->attributes['token'];
+        return $this->attributes['token'] ?? Auth::guard('api')->getTokenForRequest() ?? null;
     }
 
     protected function setTokenAttribute($token)
