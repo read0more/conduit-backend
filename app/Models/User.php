@@ -51,4 +51,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         $this->attributes['token'] = $token;
     }
+
+    public function articles()
+    {
+        return $this->hasMany('App\Models\Article');
+    }
 }

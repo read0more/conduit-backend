@@ -27,3 +27,7 @@ $router->group(['prefix' => 'user', 'middleware' => 'auth'], function () use ($r
     $router->get('/', 'UserController@me');
     $router->put('/', 'UserController@update');
 });
+
+$router->group(['prefix' => 'articles', 'middleware' => 'auth'], function () use ($router) {
+    $router->post('/', 'ArticleController@create');
+});
