@@ -1,33 +1,35 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return view('welcome');
 });
 
 
 $router->group(['prefix' => 'users'], function () use ($router) {
-    $router->post('/', 'UserController@register');
-    $router->post('/login', 'UserController@login');
+    $router->post('/', [UserController::class, 'register']);
+    $router->post('/login', [UserController::class, 'login']);
 });
 
 $router->group(['prefix' => 'user', 'middleware' => 'auth'], function () use ($router) {
-    $router->get('/', 'UserController@me');
-    $router->put('/', 'UserController@update');
+    $router->get('/', [UserController::class, 'me']);
+    $router->put('/', [UserController::class, 'update']);
 });
 
 $router->group(['prefix' => 'articles', 'middleware' => 'auth'], function () use ($router) {
-    $router->post('/', 'ArticleController@create');
+    $router->post('/', [ArticleController::class, 'create']);
 });
