@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+$router->get('/', function () use ($router) {
     return view('welcome');
+});
+
+
+$router->group(['prefix' => 'users'], function () use ($router) {
+    $router->post('/', [UserController::class, 'register']);
+    $router->post('/login', 'UserController@login');
+});
+
+$router->group(['prefix' => 'user', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/', 'UserController@me');
+    $router->put('/', 'UserController@update');
+});
+
+$router->group(['prefix' => 'articles', 'middleware' => 'auth'], function () use ($router) {
+    $router->post('/', 'ArticleController@create');
 });
