@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class UserController extends Controller
 {
@@ -48,7 +50,10 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        return response()->json(['user' => $user]);
+        $expire = Carbon::now()->addSecond(3600);
+        $tokenCookie = Cookie::create('token', $user->token, $expire->toCookieString());        
+
+        return response()->json(['user' => $user])->withCookie($tokenCookie);
     }
 
     public function me(Request $request)
