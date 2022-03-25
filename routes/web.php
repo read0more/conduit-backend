@@ -25,11 +25,11 @@ $router->group(['prefix' => 'users'], function () use ($router) {
     $router->post('/login', [UserController::class, 'login']);
 });
 
-$router->group(['prefix' => 'user', 'middleware' => 'auth'], function () use ($router) {
+$router->group(['prefix' => 'user', 'middleware' => 'auth:api'], function () use ($router) {
     $router->get('/', [UserController::class, 'me']);
     $router->put('/', [UserController::class, 'update']);
 });
 
-$router->group(['prefix' => 'articles', 'middleware' => 'auth'], function () use ($router) {
+$router->group(['prefix' => 'articles', 'middleware' => 'auth:api'], function () use ($router) {
     $router->post('/', [ArticleController::class, 'create']);
 });

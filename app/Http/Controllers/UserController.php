@@ -44,14 +44,14 @@ class UserController extends Controller
 
         $userFileds = $request->user;
         $user = User::where('email', '=', $userFileds['email'])->firstOrFail();
-        $user->token = auth()->attempt(['email' => $userFileds['email'], 'password' => $userFileds['password']]);
+        $user->token = auth()->guard('api')->attempt(['email' => $userFileds['email'], 'password' => $userFileds['password']]);
 
         if (!$user->token) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
         $expire = Carbon::now()->addSecond(3600);
-        $tokenCookie = Cookie::create('token', $user->token, $expire->toCookieString());        
+        $tokenCookie = Cookie::create('token', $user->token, $expire->toCookieString());
 
         return response()->json(['user' => $user])->withCookie($tokenCookie);
     }
