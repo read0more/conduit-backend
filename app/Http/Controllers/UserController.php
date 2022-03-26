@@ -44,7 +44,7 @@ class UserController extends Controller
 
         $userFileds = $request->user;
         $user = User::where('email', '=', $userFileds['email'])->firstOrFail();
-        $user->token = auth()->guard('api')->attempt(['email' => $userFileds['email'], 'password' => $userFileds['password']]);
+        $user->token = auth()->attempt(['email' => $userFileds['email'], 'password' => $userFileds['password']]);
 
         if (!$user->token) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
