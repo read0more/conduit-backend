@@ -13,7 +13,7 @@ class Article extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'body'
+        'title', 'description', 'body', 'slug'
     ];
 
     /**
@@ -26,21 +26,22 @@ class Article extends Model
         'updated_at',
     ];
 
-    protected $attributes = [
-        // 'tagList' => [],
-    ];
-
     // todo: 직접 바꾸는 식이 아니라 전체 필드에 대해서 camelcase로 바꾸는 방법 있는지 확인 필요
-    protected $appends = ['createdAt', 'updatedAt'];
+    protected $appends = ['createdAt', 'updatedAt', 'tagList'];
 
-    public function getCreatedAtAttribute($key)
+    public function getCreatedAtAttribute()
     {
         return $this->attributes['created_at'] ?? null;
     }
 
-    public function getUpdatedAtAttribute($key)
+    public function getUpdatedAtAttribute()
     {
         return $this->attributes['updated_at'] ?? null;
+    }
+
+    public function getTagListAttribute()
+    {
+        return $this->tags()->get();
     }
 
 
