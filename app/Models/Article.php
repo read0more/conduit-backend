@@ -27,7 +27,7 @@ class Article extends Model
     ];
 
     // todo: 직접 바꾸는 식이 아니라 전체 필드에 대해서 camelcase로 바꾸는 방법 있는지 확인 필요
-    protected $appends = ['createdAt', 'updatedAt', 'tagList'];
+    protected $appends = ['createdAt', 'updatedAt', 'tagList', 'author'];
 
     public function getCreatedAtAttribute()
     {
@@ -44,9 +44,21 @@ class Article extends Model
         return $this->tags()->get();
     }
 
+    public function getAuthorAttribute()
+    {
+        return $this->user()->get();
+    }
+
 
     public function tags()
     {
         return $this->belongsToMany('App\Models\Tag', 'article_tags');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // todo: favorite article 되면 카운트 및 favorite 했는지도 나오게
 }
