@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,20 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 $router->get('/', function () use ($router) {
     return view('welcome');
-});
-
-
-$router->group(['prefix' => 'users'], function () use ($router) {
-    $router->post('/', [UserController::class, 'register']);
-    $router->post('/login', [UserController::class, 'login']);
-});
-
-$router->group(['prefix' => 'user', 'middleware' => 'auth:api'], function () use ($router) {
-    $router->get('/', [UserController::class, 'me']);
-    $router->put('/', [UserController::class, 'update']);
-});
-
-$router->group(['prefix' => 'articles', 'middleware' => 'auth:api'], function () use ($router) {
-    $router->post('/', [ArticleController::class, 'create']);
-    $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
 });
