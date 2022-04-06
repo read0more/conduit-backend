@@ -44,6 +44,12 @@ class ArticleController extends Controller
         return response()->json(['article' => $article], 201);
     }
 
+    public function read()
+    {
+        $articles = Article::all();
+        return response()->json(['articles' => $articles, 'articlesCount' => $articles->count()], 200);
+    }
+
     /**
      * @param Article $article
      * @return \Illuminate\Http\JsonResponse
