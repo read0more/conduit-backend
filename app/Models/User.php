@@ -35,7 +35,7 @@ class User extends Authenticatable implements JWTSubject
         'image' => null,
     ];
 
-    protected $appends = ['token'];
+    protected $appends = ['token', 'favoriteArticleIds'];
 
     protected function getTokenAttribute()
     {
@@ -52,7 +52,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Models\Article');
     }
 
-        /**
+    public function getFavoriteArticleIdsAttribute()
+    {
+        return $this->hasMany('App\Models\Favorite')->pluck('article_id');
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
@@ -27,7 +28,7 @@ class Article extends Model
     ];
 
     // todo: 직접 바꾸는 식이 아니라 전체 필드에 대해서 camelcase로 바꾸는 방법 있는지 확인 필요
-    protected $appends = ['createdAt', 'updatedAt', 'tagList', 'author', 'favoritesCount'];
+    protected $appends = ['createdAt', 'updatedAt', 'tagList', 'author', 'favoritesCount', 'favorited'];
 
     public function getCreatedAtAttribute()
     {
@@ -63,5 +64,11 @@ class Article extends Model
     public function getFavoritesCountAttribute()
     {
         return $this->hasMany('App\Models\Favorite')->count();
+    }
+
+    public function getFavoritedAttribute()
+    {
+        $user = Auth::user();
+        return in_array($this->attributes['id'], $user->favoriteArticleIds->toArray());
     }
 }
