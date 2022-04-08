@@ -44,9 +44,18 @@ class ArticleController extends Controller
         return response()->json(['article' => $article], 201);
     }
 
-    public function read()
+    public function read(Request $request)
     {
-        $articles = Article::all();
+        $author = $request->get('author');
+
+        if ($author) {
+            $articles = Article::whereHas('user', function ($query) use ($author) {
+                $query->where('username', 'like', "%$author%");
+            })->get();
+        } else {
+            $articles = Article::all();
+        }
+
         return response()->json(['articles' => $articles, 'articlesCount' => $articles->count()], 200);
     }
 
