@@ -33,7 +33,7 @@ class ArticleController extends Controller
 
         if (count($tagFields)) {
             $tagIds = [];
-            foreach($tagFields as $tag) {
+            foreach ($tagFields as $tag) {
                 $tagIds[] = (Tag::create(['body' => $tag]))->id;
             }
             // todo: 중복인 tag는 새로 안만들어지게?
@@ -47,10 +47,15 @@ class ArticleController extends Controller
     public function read(Request $request)
     {
         $author = $request->get('author');
+        $tag = $request->get('tag');
 
         if ($author) {
             $articles = Article::whereHas('user', function ($query) use ($author) {
                 $query->where('username', 'like', "%$author%");
+            })->get();
+        } else if ($tag) {
+            $articles = Article::whereHas('tags', function ($query) use ($tag) {
+                $query->where('body', '=', $tag);
             })->get();
         } else {
             $articles = Article::all();
