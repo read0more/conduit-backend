@@ -69,6 +69,7 @@ class Article extends Model
     public function getFavoritedAttribute()
     {
         $user = Auth::user();
-        return in_array($this->attributes['id'], $user->favoriteArticleIds->toArray());
+        $favoriteArticleIds = $user ? $user->favoriteArticleIds->toArray() : [];
+        return in_array($this->attributes['id'], $favoriteArticleIds);
     }
 }
