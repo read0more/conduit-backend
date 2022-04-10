@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Favorite;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,6 +49,7 @@ class ArticleController extends Controller
     {
         $author = $request->get('author');
         $tag = $request->get('tag');
+        $favorited = $request->get('favorited');
 
         if ($author) {
             $articles = Article::whereHas('user', function ($query) use ($author) {
@@ -57,6 +59,8 @@ class ArticleController extends Controller
             $articles = Article::whereHas('tags', function ($query) use ($tag) {
                 $query->where('body', '=', $tag);
             })->get();
+        } else if ($favorited) {
+            $articles = User::where('username', $favorited)->get();
         } else {
             $articles = Article::all();
         }
