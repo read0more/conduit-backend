@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfilesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,9 @@ $router->group(['prefix' => 'articles'], function () use ($router) {
 $router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], function () use ($router) {
     $router->post('/', [ArticleController::class, 'create']);
     $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
+});
+
+
+$router->group(['prefix' => 'profiles'], function () use ($router) {
+    $router->get('/{user:username}', [ProfilesController::class, 'get']);
 });
