@@ -45,3 +45,7 @@ $router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], functio
 $router->group(['prefix' => 'profiles'], function () use ($router) {
     $router->get('/{user:username}', [ProfilesController::class, 'get']);
 });
+
+$router->group(['prefix' => 'profiles', 'middleware' => 'auth:sanctum'], function () use ($router) {
+    $router->post('/{user:username}/follow', [ProfilesController::class, 'follow']);
+});
