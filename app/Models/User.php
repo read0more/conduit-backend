@@ -35,7 +35,7 @@ class User extends Authenticatable implements JWTSubject
         'image' => null,
     ];
 
-    protected $appends = ['token', 'favoriteArticle', 'favoriteArticleIds'];
+    protected $appends = ['token', 'favoriteArticle', 'favoriteArticleIds', 'following'];
 
     protected function getTokenAttribute()
     {
@@ -60,6 +60,11 @@ class User extends Authenticatable implements JWTSubject
     public function getFavoriteArticleIdsAttribute()
     {
         return $this->hasMany('App\Models\Favorite')->pluck('article_id');
+    }
+
+    public function getFollowingAttribute()
+    {
+        return $this->hasMany('App\Models\Follower', 'follower_id')->get();
     }
 
     /**
