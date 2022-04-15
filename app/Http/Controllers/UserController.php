@@ -25,12 +25,12 @@ class UserController extends Controller
             'user.password' => 'required',
         ]);
 
-        $userFileds = $request->all()['user'];
-        $password = $userFileds['password'];
-        $userFileds['password'] = Hash::make($password);
+        $userFields = $request->all()['user'];
+        $password = $userFields['password'];
+        $userFields['password'] = Hash::make($password);
 
-        $user = User::create($userFileds);
-        $user->token = auth()->attempt(['email' => $userFileds['email'], 'password' => $password]);
+        $user = User::create($userFields);
+        $user->token = auth()->attempt(['email' => $userFields['email'], 'password' => $password]);
         return response()->json(['user' => $user], 201);
     }
 
@@ -42,9 +42,9 @@ class UserController extends Controller
             'user.password' => 'required',
         ]);
 
-        $userFileds = $request->user;
-        $user = User::where('email', '=', $userFileds['email'])->firstOrFail();
-        $user->token = auth()->attempt(['email' => $userFileds['email'], 'password' => $userFileds['password']]);
+        $userFields = $request->user;
+        $user = User::where('email', '=', $userFields['email'])->firstOrFail();
+        $user->token = auth()->attempt(['email' => $userFields['email'], 'password' => $userFields['password']]);
 
         if (!$user->token) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
@@ -69,13 +69,13 @@ class UserController extends Controller
             'user.email' => 'email|unique:users,email',
         ]);
 
-        $userFileds = $request->all()['user'];
-        if ($userFileds['password'] ?? false) {
-            $userFileds['password'] = Hash::make($userFileds['password']);
+        $userFields = $request->all()['user'];
+        if ($userFields['password'] ?? false) {
+            $userFields['password'] = Hash::make($userFields['password']);
         }
 
         $user = User::find($request->user()['id']);
-        $user->update($userFileds);
+        $user->update($userFields);
         return response()->json(['user' => $user], 201);
     }
 }
