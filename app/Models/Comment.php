@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    protected $dateFormat = \DateTime::ISO8601;
-
     use HasFactory;
 
     /**
