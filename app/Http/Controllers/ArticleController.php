@@ -88,6 +88,16 @@ class ArticleController extends Controller
         return response()->json(['article' => $article], 200);
     }
 
+    public function delete(Article $article)
+    {
+        if (!$this->checkIdIsMe($article->user()->first()->id)) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        $article->delete();
+        return response('', 204);
+    }
+
     /**
      * @param Article $article
      * @return \Illuminate\Http\JsonResponse

@@ -40,6 +40,7 @@ $router->group(['prefix' => 'articles'], function () use ($router) {
 $router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], function () use ($router) {
     $router->post('/', [ArticleController::class, 'create']);
     $router->put('/{article:slug}', [ArticleController::class, 'update']);
+    $router->delete('/{article:slug}', [ArticleController::class, 'delete']);
     $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
     $router->post('/{article:slug}/comments', [CommentController::class, 'create']);
     $router->delete('/{article:slug}/comments/{comment}', [CommentController::class, 'delete']);
