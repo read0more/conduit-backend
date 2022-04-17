@@ -9,9 +9,12 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\checkIdIsMe;
 
 class CommentController extends Controller
 {
+    use CheckIdIsMe;
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -42,9 +45,7 @@ class CommentController extends Controller
 
     public function delete(Article $article, Comment $comment)
     {
-        $user = Auth::user();
-
-        if ($user['id'] !== $comment->author()->first()->id) {
+        if (!$this->checkIdIsMe($comment->author()->first()->id)) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 

@@ -8,9 +8,12 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\checkIdIsMe;
 
 class ArticleController extends Controller
 {
+    use CheckIdIsMe;
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -75,9 +78,7 @@ class ArticleController extends Controller
             'article.body' => 'required',
         ]);
 
-        $user = Auth::user();
-
-        if ($user['id'] !== $article->user()->first()->id) {
+        if (!$this->checkIdIsMe($article->user()->first()->id)) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
@@ -86,7 +87,6 @@ class ArticleController extends Controller
 
         return response()->json(['article' => $article], 200);
     }
-
 
     /**
      * @param Article $article
