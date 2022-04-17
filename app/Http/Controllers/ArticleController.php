@@ -68,6 +68,26 @@ class ArticleController extends Controller
         return response()->json(['articles' => $articles, 'articlesCount' => $articles->count()], 200);
     }
 
+    public function update(Request $request, Article $article)
+    {
+        $this->validate($request, [
+            'article' => 'required|array|min:1',
+            'article.body' => 'required',
+        ]);
+
+        $user = Auth::user();
+
+        if ($user['id'] !== $article->user()->first()->id) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        $fields = $request->all()['article'];
+        $article->update($fields);
+
+        return response()->json(['article' => $article], 200);
+    }
+
+
     /**
      * @param Article $article
      * @return \Illuminate\Http\JsonResponse
