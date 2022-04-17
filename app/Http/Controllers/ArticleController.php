@@ -86,6 +86,6 @@ class ArticleController extends Controller
             $favorite->save();
         }
 
-        return response()->json(['article' => $article], 201);
+        return response()->json(['article' => $article->comments()->get()], 201);
     }
 }

@@ -58,7 +58,12 @@ class Article extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'article_id');
     }
 
     public function getFavoritesCountAttribute()

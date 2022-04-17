@@ -32,15 +32,16 @@ $router->group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function ()
     $router->put('/', [UserController::class, 'update']);
 });
 
-
 $router->group(['prefix' => 'articles'], function () use ($router) {
     $router->get('/', [ArticleController::class, 'read']);
+    $router->get('/{article:slug}/comments', [CommentController::class, 'read']);
 });
 
 $router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], function () use ($router) {
     $router->post('/', [ArticleController::class, 'create']);
     $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
     $router->post('/{article:slug}/comments', [CommentController::class, 'create']);
+    $router->delete('/{article:slug}/comments/{comment}', [CommentController::class, 'delete']);
 });
 
 

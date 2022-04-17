@@ -34,4 +34,21 @@ class CommentController extends Controller
 
         return response()->json(['comment' => $comment], 201);
     }
+
+    public function read(Article $article)
+    {
+        return response()->json(['comments' => $article->comments()->get()], 200);
+    }
+
+    public function delete(Article $article, Comment $comment)
+    {
+        $user = Auth::user();
+
+        if ($user['id'] !== $comment->author()->first()->id) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        $comment->delete();
+        return response('', 204);
+    }
 }
