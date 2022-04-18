@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Comment;
-use App\Models\Favorite;
-use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\checkIdIsMe;
