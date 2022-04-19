@@ -34,16 +34,21 @@ $router->group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function ()
 
 $router->group(['prefix' => 'articles'], function () use ($router) {
     $router->get('/', [ArticleController::class, 'read']);
-    $router->get('/{article:slug}/comments', [CommentController::class, 'read']);
+
+    $router->group(['middleware' => 'check.article'], function () use ($router) {
+        $router->get('/{article:slug}/comments', [CommentController::class, 'read']);
+    });
 });
 
 $router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], function () use ($router) {
     $router->post('/', [ArticleController::class, 'create']);
-    $router->put('/{article:slug}', [ArticleController::class, 'update']);
-    $router->delete('/{article:slug}', [ArticleController::class, 'delete']);
-    $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
-    $router->post('/{article:slug}/comments', [CommentController::class, 'create']);
-    $router->delete('/{article:slug}/comments/{comment}', [CommentController::class, 'delete']);
+    $router->group(['middleware' => 'check.article'], function () use ($router) {
+        $router->put('/{article:slug}', [ArticleController::class, 'update']);
+        $router->delete('/{article:slug}', [ArticleController::class, 'delete']);
+        $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
+        $router->post('/{article:slug}/comments', [CommentController::class, 'create']);
+        $router->delete('/{article:slug}/comments/{comment}', [CommentController::class, 'delete']);
+    });
 });
 
 
