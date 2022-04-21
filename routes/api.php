@@ -17,6 +17,15 @@ use App\Http\Controllers\ProfilesController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+$missingArticle = function (Request $request) {
+    $articleSlug = $request->route()->parameter('article');
+    return response()->json(['error' => "Cannot found article: $articleSlug."], 404);
+};
+
+$missingUser = function (Request $request) {
+    $username = $request->route()->parameter('user');
+    return response()->json(['error' => "Cannot found user: $username."], 404);
+};
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -32,30 +41,25 @@ $router->group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function ()
     $router->put('/', [UserController::class, 'update']);
 });
 
-$router->group(['prefix' => 'articles'], function () use ($router) {
+$router->group(['prefix' => 'articles'], function () use ($missingArticle, $router) {
     $router->get('/', [ArticleController::class, 'read']);
-
-    $router->group(['middleware' => 'check.article'], function () use ($router) {
-        $router->get('/{article:slug}/comments', [CommentController::class, 'read']);
-    });
+    $router->get('/{article:slug}/comments', [CommentController::class, 'read'])->missing($missingArticle);
 });
 
-$router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], function () use ($router) {
+$router->group(['prefix' => 'articles', 'middleware' => 'auth:sanctum'], function () use ($missingArticle, $router) {
     $router->post('/', [ArticleController::class, 'create']);
-    $router->group(['middleware' => 'check.article'], function () use ($router) {
-        $router->put('/{article:slug}', [ArticleController::class, 'update']);
-        $router->delete('/{article:slug}', [ArticleController::class, 'delete']);
-        $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite']);
-        $router->post('/{article:slug}/comments', [CommentController::class, 'create']);
-        $router->delete('/{article:slug}/comments/{comment}', [CommentController::class, 'delete']);
-    });
+    $router->put('/{article:slug}', [ArticleController::class, 'update'])->missing($missingArticle);
+    $router->delete('/{article:slug}', [ArticleController::class, 'delete'])->missing($missingArticle);
+    $router->post('/{article:slug}/favorite', [ArticleController::class, 'favorite'])->missing($missingArticle);
+    $router->post('/{article:slug}/comments', [CommentController::class, 'create'])->missing($missingArticle);
+    $router->delete('/{article:slug}/comments/{comment}', [CommentController::class, 'delete'])->missing($missingArticle);
 });
 
 
-$router->group(['prefix' => 'profiles'], function () use ($router) {
-    $router->get('/{user:username}', [ProfilesController::class, 'get']);
+$router->group(['prefix' => 'profiles'], function () use ($missingUser, $router) {
+    $router->get('/{user:username}', [ProfilesController::class, 'get'])->missing($missingUser);
 });
 
-$router->group(['prefix' => 'profiles', 'middleware' => 'auth:sanctum'], function () use ($router) {
-    $router->post('/{user:username}/follow', [ProfilesController::class, 'follow']);
+$router->group(['prefix' => 'profiles', 'middleware' => 'auth:sanctum'], function () use ($missingUser, $router) {
+    $router->post('/{user:username}/follow', [ProfilesController::class, 'follow'])->missing($missingUser);
 });
