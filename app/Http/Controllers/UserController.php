@@ -34,7 +34,8 @@ class UserController extends Controller
     }
 
     public function login(Request $request)
-    {
+    {var_dump(1);
+
         $this->validate($request, [
             'user' => 'required|array|min:2',
             'user.email' => 'required',
